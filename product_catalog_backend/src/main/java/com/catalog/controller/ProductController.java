@@ -1,7 +1,6 @@
 package com.catalog.controller;
 
-import com.catalog.dto.ProductDTO.ProductRequestDTO;
-import com.catalog.dto.ProductDTO.ProductResponseDTO;
+import com.catalog.dto.ProductDTO;
 import com.catalog.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,7 @@ public class ProductController {
   }
 
   @GetMapping
-  public Page<ProductResponseDTO> list(
+  public Page<ProductDTO> list(
       Authentication auth,
       @RequestParam(required = false) Long categoryId,
       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
@@ -38,19 +37,18 @@ public class ProductController {
   }
 
   @GetMapping("/{id}")
-  public ProductResponseDTO get(Authentication auth, @PathVariable Long id) {
+  public ProductDTO get(Authentication auth, @PathVariable Long id) {
     return service.product(auth.getName(), id);
   }
 
   @PostMapping
-  public ProductResponseDTO create(
-      Authentication auth, @Valid @RequestBody ProductRequestDTO request) {
+  public ProductDTO create(Authentication auth, @Valid @RequestBody ProductDTO request) {
     return service.createProduct(auth.getName(), request);
   }
 
   @PutMapping("/{id}")
-  public ProductResponseDTO update(
-      Authentication auth, @PathVariable Long id, @Valid @RequestBody ProductRequestDTO request) {
+  public ProductDTO update(
+      Authentication auth, @PathVariable Long id, @Valid @RequestBody ProductDTO request) {
     return service.updateProduct(auth.getName(), id, request);
   }
 

@@ -8,7 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.catalog.dto.ProductDTO.ProductRequestDTO;
+import com.catalog.dto.ProductDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Category;
 import com.catalog.model.Role;
@@ -53,7 +53,7 @@ class CatalogServicesTest {
             ResponseStatusException.class,
             () ->
                 productService.createProduct(
-                    user.getEmail(), new ProductRequestDTO("Item", "", BigDecimal.TEN, Set.of(4L))));
+                    user.getEmail(), new ProductDTO("Item", "", BigDecimal.TEN, Set.of(4L))));
 
     assertEquals(404, exception.getStatusCode().value());
     verify(products, never()).save(any());

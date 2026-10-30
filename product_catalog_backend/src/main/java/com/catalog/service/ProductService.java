@@ -1,8 +1,7 @@
 package com.catalog.service;
 
-import com.catalog.dto.CategoryDTO.CategoryResponseDTO;
-import com.catalog.dto.ProductDTO.ProductRequestDTO;
-import com.catalog.dto.ProductDTO.ProductResponseDTO;
+import com.catalog.dto.CategoryDTO;
+import com.catalog.dto.ProductDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Category;
 import com.catalog.model.Product;
@@ -33,7 +32,7 @@ public class ProductService {
   }
 
   @Transactional(readOnly = true)
-  public Page<ProductResponseDTO> products(String email, Long categoryId, Pageable pageable) {
+  public Page<ProductDTO> products(String email, Long categoryId, Pageable pageable) {
     String createdBy = requireUser(email).getEmail();
     Page<Product> result =
         categoryId == null
@@ -45,13 +44,13 @@ public class ProductService {
   }
 
   @Transactional(readOnly = true)
-  public ProductResponseDTO product(String email, Long id) {
+  public ProductDTO product(String email, Long id) {
     Product product = findOwnedProduct(email, id);
     return toResponse(product);
   }
 
   @Transactional
-  public ProductResponseDTO createProduct(String email, ProductRequestDTO request) {
+  public ProductDTO createProduct(String email, ProductDTO request) {
     String createdBy = requireUser(email).getEmail();
     Product product =
         products.saveAndFlush(
@@ -66,7 +65,7 @@ public class ProductService {
   }
 
   @Transactional
-  public ProductResponseDTO updateProduct(String email, Long id, ProductRequestDTO request) {
+  public ProductDTO updateProduct(String email, Long id, ProductDTO request) {
     Product product = findOwnedProduct(email, id);
     product.setUpdatedBy(email);
     product.setName(request.getName().trim());
@@ -114,14 +113,14 @@ public class ProductService {
             () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesión no válida"));
   }
 
-  private ProductResponseDTO toResponse(Product product) {
-    Set<CategoryResponseDTO> categoryResponses =
+  private ProductDTO toResponse(Product product) {
+    Set<CategoryDTO> categoryResponses =
         product.getProductCategories().stream()
             .map(link -> link.getCategory())
-            .map(category -> new CategoryResponseDTO(category.getId(), category.getName()))
+            .map(category -> new CategoryDTO(category.getId(), category.getName()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
 
-    return new ProductResponseDTO(
+    return new ProductDTO(
         product.getId(),
         product.getName(),
         product.getDescription(),

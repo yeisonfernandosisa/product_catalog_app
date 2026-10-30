@@ -1,123 +1,89 @@
 package com.catalog.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Set;
 
-public final class ProductDTO {
-  private ProductDTO() {}
+public class ProductDTO {
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private Long id;
 
-  public static class ProductRequestDTO {
-    @NotBlank private String name;
-    private String description;
-    @NotNull @DecimalMin(value = "0.0", inclusive = false) private BigDecimal price;
-    private Set<Long> categoryIds;
+  @NotBlank private String name;
+  private String description;
+  @NotNull @DecimalMin(value = "0.0", inclusive = false) private BigDecimal price;
 
-    public ProductRequestDTO() {}
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Set<Long> categoryIds;
 
-    public ProductRequestDTO(
-        String name, String description, BigDecimal price, Set<Long> categoryIds) {
-      this.name = name;
-      this.description = description;
-      this.price = price;
-      this.categoryIds = categoryIds;
-    }
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private Set<CategoryDTO> categories;
 
-    public String getName() {
-      return name;
-    }
+  public ProductDTO() {}
 
-    public void setName(String name) {
-      this.name = name;
-    }
-
-    public String getDescription() {
-      return description;
-    }
-
-    public void setDescription(String description) {
-      this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-      return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-      this.price = price;
-    }
-
-    public Set<Long> getCategoryIds() {
-      return categoryIds;
-    }
-
-    public void setCategoryIds(Set<Long> categoryIds) {
-      this.categoryIds = categoryIds;
-    }
+  public ProductDTO(String name, String description, BigDecimal price, Set<Long> categoryIds) {
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.categoryIds = categoryIds;
   }
 
-  public static class ProductResponseDTO {
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Set<CategoryDTO.CategoryResponseDTO> categories;
+  public ProductDTO(
+      Long id, String name, String description, BigDecimal price, Set<CategoryDTO> categories) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.categories = categories;
+  }
 
-    public ProductResponseDTO() {}
+  public Long getId() {
+    return id;
+  }
 
-    public ProductResponseDTO(
-        Long id,
-        String name,
-        String description,
-        BigDecimal price,
-        Set<CategoryDTO.CategoryResponseDTO> categories) {
-      this.id = id;
-      this.name = name;
-      this.description = description;
-      this.price = price;
-      this.categories = categories;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Long getId() {
-      return id;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setId(Long id) {
-      this.id = id;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-      return name;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setName(String name) {
-      this.name = name;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getDescription() {
-      return description;
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
-    public void setDescription(String description) {
-      this.description = description;
-    }
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
 
-    public BigDecimal getPrice() {
-      return price;
-    }
+  public Set<Long> getCategoryIds() {
+    return categoryIds;
+  }
 
-    public void setPrice(BigDecimal price) {
-      this.price = price;
-    }
+  public void setCategoryIds(Set<Long> categoryIds) {
+    this.categoryIds = categoryIds;
+  }
 
-    public Set<CategoryDTO.CategoryResponseDTO> getCategories() {
-      return categories;
-    }
+  public Set<CategoryDTO> getCategories() {
+    return categories;
+  }
 
-    public void setCategories(Set<CategoryDTO.CategoryResponseDTO> categories) {
-      this.categories = categories;
-    }
+  public void setCategories(Set<CategoryDTO> categories) {
+    this.categories = categories;
   }
 }

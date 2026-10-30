@@ -1,7 +1,6 @@
 package com.catalog.service;
 
-import com.catalog.dto.CategoryDTO.CategoryRequestDTO;
-import com.catalog.dto.CategoryDTO.CategoryResponseDTO;
+import com.catalog.dto.CategoryDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Category;
 import com.catalog.repository.CategoryRepository;
@@ -30,18 +29,18 @@ public class CategoryService {
   }
 
   @Transactional(readOnly = true)
-  public Page<CategoryResponseDTO> categories(String email, Pageable pageable) {
+  public Page<CategoryDTO> categories(String email, Pageable pageable) {
     String createdBy = requireUser(email).getEmail();
     return categories.findAllByCreatedBy(createdBy, pageable).map(this::toResponse);
   }
 
   @Transactional(readOnly = true)
-  public CategoryResponseDTO category(String email, Long id) {
+  public CategoryDTO category(String email, Long id) {
     return toResponse(findOwnedCategory(email, id));
   }
 
   @Transactional
-  public CategoryResponseDTO createCategory(String email, CategoryRequestDTO request) {
+  public CategoryDTO createCategory(String email, CategoryDTO request) {
     String createdBy = requireUser(email).getEmail();
     String name = request.getName().trim();
     if (categories.existsByNameIgnoreCaseAndCreatedBy(name, createdBy)) {
@@ -53,7 +52,7 @@ public class CategoryService {
   }
 
   @Transactional
-  public CategoryResponseDTO updateCategory(String email, Long id, CategoryRequestDTO request) {
+  public CategoryDTO updateCategory(String email, Long id, CategoryDTO request) {
     Category category = findOwnedCategory(email, id);
     String name = request.getName().trim();
     if (!category.getName().equalsIgnoreCase(name)
@@ -95,7 +94,7 @@ public class CategoryService {
             () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesión no válida"));
   }
 
-  private CategoryResponseDTO toResponse(Category category) {
-    return new CategoryResponseDTO(category.getId(), category.getName());
+  private CategoryDTO toResponse(Category category) {
+    return new CategoryDTO(category.getId(), category.getName());
   }
 }

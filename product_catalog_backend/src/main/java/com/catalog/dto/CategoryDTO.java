@@ -1,53 +1,34 @@
 package com.catalog.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
-public final class CategoryDTO {
-  private CategoryDTO() {}
+public class CategoryDTO {
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+  private Long id;
 
-  public static class CategoryRequestDTO {
-    @NotBlank private String name;
+  @NotBlank private String name;
 
-    public CategoryRequestDTO() {}
+  public CategoryDTO() {}
 
-    public CategoryRequestDTO(String name) {
-      this.name = name;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public void setName(String name) {
-      this.name = name;
-    }
+  public CategoryDTO(Long id, String name) {
+    this.id = id;
+    this.name = name;
   }
 
-  public static class CategoryResponseDTO {
-    private Long id;
-    private String name;
+  public Long getId() {
+    return id;
+  }
 
-    public CategoryResponseDTO() {}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public CategoryResponseDTO(Long id, String name) {
-      this.id = id;
-      this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Long getId() {
-      return id;
-    }
-
-    public void setId(Long id) {
-      this.id = id;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public void setName(String name) {
-      this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
   }
 }
