@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SeedData {
   @Bean
+  @SuppressWarnings("unused")
   CommandLineRunner seedAdmin(
       UserRepository users,
       PasswordEncoder encoder,

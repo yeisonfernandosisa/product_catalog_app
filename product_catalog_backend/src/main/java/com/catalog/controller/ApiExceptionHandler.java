@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @SuppressWarnings("unused")
     ResponseEntity<Map<String, Object>> validation(MethodArgumentNotValidException exception) {
         String message
                 = exception.getBindingResult().getFieldErrors().stream()
@@ -27,6 +28,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
+    @SuppressWarnings("unused")
     ResponseEntity<Map<String, Object>> status(ResponseStatusException exception) {
         return response(HttpStatus.valueOf(exception.getStatusCode().value()), exception.getReason());
     }

@@ -26,6 +26,7 @@ public class Category extends AuditableEntity {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @SuppressWarnings("FieldMayBeFinal")
     private Set<ProductCategory> productCategories = new LinkedHashSet<>();
 
     protected Category() {

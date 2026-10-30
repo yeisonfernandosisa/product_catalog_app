@@ -48,12 +48,12 @@ public class AuthController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/profile")
+  @GetMapping({"/me", "/profile"})
   public UserResponseDTO profile(Authentication auth) {
     return service.profile(auth.getName());
   }
 
-  @PutMapping("/profile")
+  @PutMapping({"/me", "/profile"})
   public AuthResponseDTO updateProfile(
       Authentication auth, @Valid @RequestBody UpdateProfileRequestDTO request) {
     return service.updateProfile(auth.getName(), request, auth.getName());

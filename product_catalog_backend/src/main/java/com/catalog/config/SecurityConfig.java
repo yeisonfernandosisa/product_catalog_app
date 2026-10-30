@@ -21,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
   @Bean
+  @SuppressWarnings("unused")
   SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter)
       throws Exception {
     return http.csrf(csrf -> csrf.disable())
@@ -63,16 +64,19 @@ public class SecurityConfig {
   }
 
   @Bean
+  @SuppressWarnings("unused")
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
   @Bean
+  @SuppressWarnings("unused")
   AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
     return config.getAuthenticationManager();
   }
 
   @Bean
+  @SuppressWarnings("unused")
   CorsConfigurationSource corsConfigurationSource(
       @Value("${app.cors.allowed-origin}") String allowedOrigin) {
     CorsConfiguration config = new CorsConfiguration();

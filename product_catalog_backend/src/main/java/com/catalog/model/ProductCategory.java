@@ -41,6 +41,10 @@ public class ProductCategory extends AuditableEntity {
         return id;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
     public Category getCategory() {
         return category;
     }

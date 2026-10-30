@@ -31,6 +31,7 @@ public class Product extends AuditableEntity {
     private BigDecimal price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @SuppressWarnings("FieldMayBeFinal")
     private Set<ProductCategory> productCategories = new LinkedHashSet<>();
 
     protected Product() {
