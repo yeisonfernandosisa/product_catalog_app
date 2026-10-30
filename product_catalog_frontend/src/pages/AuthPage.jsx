@@ -50,7 +50,7 @@ export default function AuthPage({ mode }) {
         onSubmit={submit}
       >
         <p className="mb-2 text-[10px] font-bold tracking-[0.15em] text-indigo-600">
-          PRODUCT CATALOG
+          CATÁLOGO DE PRODUCTOS
         </p>
         <h1 className="mb-2 font-display text-2xl font-extrabold tracking-tight text-slate-900">
           {isRegister ? 'Crear cuenta' : 'Bienvenido de nuevo'}

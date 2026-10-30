@@ -6,15 +6,15 @@ import jakarta.validation.constraints.Size;
 
 public class RegisterRequestDTO {
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "no puede estar vacío")
+    @Email(message = "debe tener un formato de correo electrónico válido")
     private String email;
 
-    @NotBlank
-    @Size(min = 8)
+    @NotBlank(message = "no puede estar vacía")
+    @Size(min = 8, message = "debe tener al menos {min} caracteres")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "no puede estar vacío")
     private String fullName;
 
     public RegisterRequestDTO() {

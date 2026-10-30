@@ -14,13 +14,13 @@ public class ProductDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "no puede estar vacío")
     private String name;
 
     private String description;
 
-    @NotNull
-    @DecimalMin(value = "0.0", inclusive = false)
+    @NotNull(message = "es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "debe ser mayor que cero")
     private BigDecimal price;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

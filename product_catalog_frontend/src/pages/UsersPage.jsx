@@ -144,8 +144,8 @@ export default function UsersPage() {
                   })
                 }
               >
-                <option>USER</option>
-                <option>ADMIN</option>
+                <option value="USER">Usuario</option>
+                <option value="ADMIN">Administrador</option>
               </select>
             </label>
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
@@ -221,7 +221,7 @@ export default function UsersPage() {
                     </td>
                     <td className="border-b border-slate-100 px-3 py-3">
                       <span className="inline-flex rounded-md bg-indigo-50 px-2 py-1 text-[10px] font-semibold text-indigo-700">
-                        {user.role}
+                        {user.role === 'ADMIN' ? 'Administrador' : 'Usuario'}
                       </span>
                     </td>
                     <td className="whitespace-nowrap border-b border-slate-100 px-3 py-3">

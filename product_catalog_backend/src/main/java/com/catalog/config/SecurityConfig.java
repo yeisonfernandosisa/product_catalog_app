@@ -48,7 +48,7 @@ public class SecurityConfig {
                                 .authenticationEntryPoint(
                                         (request, response, exception) -> {
                                             response.setStatus(401);
-                                            response.setContentType("application/json");
+                                            response.setContentType("application/json;charset=UTF-8");
                                             response
                                                     .getWriter()
                                                     .write(
@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 .accessDeniedHandler(
                                         (request, response, exception) -> {
                                             response.setStatus(403);
-                                            response.setContentType("application/json");
+                                            response.setContentType("application/json;charset=UTF-8");
                                             response
                                                     .getWriter()
                                                     .write(

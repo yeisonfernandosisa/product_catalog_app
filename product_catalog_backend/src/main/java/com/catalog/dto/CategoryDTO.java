@@ -9,7 +9,7 @@ public class CategoryDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "no puede estar vacío")
     private String name;
 
     public CategoryDTO() {

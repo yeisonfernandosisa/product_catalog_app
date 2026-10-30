@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Size;
 
 public class UpdateProfileRequestDTO {
 
-    @NotBlank
+    @NotBlank(message = "no puede estar vacío")
     private String fullName;
 
-    @Size(min = 8)
+    @Size(min = 8, message = "debe tener al menos {min} caracteres")
     private String password;
 
     public UpdateProfileRequestDTO() {
