@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { deleteCategory, getCategories, saveCategory } from '../api/catalog'
-import { errorMessage } from '../api/client'
+import { deleteCategory, getCategories, saveCategory } from '../api/categories'
+import { errorMessage } from '../api/apiClient'
 import Pagination from '../components/Pagination'
 
 const emptyPage = {
@@ -17,7 +17,7 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const load = useCallback(async () => {
+  const loadData = useCallback(async () => {
     setLoading(true)
     setError('')
 
@@ -31,8 +31,8 @@ export default function CategoriesPage() {
   }, [page])
 
   useEffect(() => {
-    load()
-  }, [load])
+    loadData()
+  }, [loadData])
 
   async function submit(event) {
     event.preventDefault()
@@ -42,7 +42,7 @@ export default function CategoriesPage() {
       await saveCategory({ name }, editing)
       setEditing(null)
       setName('')
-      await load()
+      await loadData()
     } catch (requestError) {
       setError(errorMessage(requestError))
     }
@@ -65,7 +65,7 @@ export default function CategoriesPage() {
 
     try {
       await deleteCategory(category.id)
-      await load()
+      await loadData()
     } catch (requestError) {
       setError(errorMessage(requestError))
     }

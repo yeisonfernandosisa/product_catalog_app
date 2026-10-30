@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { errorMessage } from '../api/client'
+import { errorMessage } from '../api/apiClient'
 import { useAuth } from '../auth/AuthContext'
 
 export default function Layout() {

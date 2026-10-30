@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { getUsers, updateUser } from '../api/catalog'
-import { errorMessage } from '../api/client'
+import { getUsers, updateUser } from '../api/users'
+import { errorMessage } from '../api/apiClient'
 import Pagination from '../components/Pagination'
 
 const emptyPage = {
@@ -24,7 +24,7 @@ export default function UsersPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
-  const load = useCallback(async () => {
+  const loadData = useCallback(async () => {
     setLoading(true)
     setError('')
 
@@ -38,8 +38,8 @@ export default function UsersPage() {
   }, [page])
 
   useEffect(() => {
-    load()
-  }, [load])
+    loadData()
+  }, [loadData])
 
   function edit(user) {
     setSelected(user)
@@ -68,7 +68,7 @@ export default function UsersPage() {
 
       await updateUser(selected.id, payload)
       cancelEdit()
-      await load()
+      await loadData()
     } catch (requestError) {
       setError(errorMessage(requestError))
     }

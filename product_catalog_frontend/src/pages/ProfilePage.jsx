@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { errorMessage } from '../api/client'
-import { getProfile, updateProfile } from '../api/catalog'
+import { errorMessage } from '../api/apiClient'
+import { getProfile, updateProfile } from '../api/auth'
 import { useAuth } from '../auth/AuthContext'
 
 const emptyForm = {

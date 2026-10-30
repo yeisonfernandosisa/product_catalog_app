@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { errorMessage } from '../api/client'
-import { login, register } from '../api/catalog'
+import { errorMessage } from '../api/apiClient'
+import { login, register } from '../api/auth'
 import { useAuth } from '../auth/AuthContext'
 
 const emptyForm = {

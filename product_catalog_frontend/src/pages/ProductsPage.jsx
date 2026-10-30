@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { deleteProduct, getCategories, getProducts, saveProduct } from '../api/catalog'
-import { errorMessage } from '../api/client'
+import { getCategories } from '../api/categories'
+import { errorMessage } from '../api/apiClient'
+import { deleteProduct, getProducts, saveProduct } from '../api/products'
 import Pagination from '../components/Pagination'
 
 const emptyForm = {
@@ -41,7 +42,7 @@ export default function ProductsPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
-  const load = useCallback(async () => {
+  const loadData = useCallback(async () => {
     setLoading(true)
     setError('')
 
@@ -66,8 +67,8 @@ export default function ProductsPage() {
   }, [page, categoryId])
 
   useEffect(() => {
-    load()
-  }, [load])
+    loadData()
+  }, [loadData])
 
   function startEdit(product) {
     setEditing(product.id)
@@ -98,7 +99,7 @@ export default function ProductsPage() {
 
       await saveProduct(product, editing === 'new' ? null : editing)
       setEditing(null)
-      await load()
+      await loadData()
     } catch (requestError) {
       setError(errorMessage(requestError))
     } finally {
@@ -113,7 +114,7 @@ export default function ProductsPage() {
 
     try {
       await deleteProduct(product.id)
-      await load()
+      await loadData()
     } catch (requestError) {
       setError(errorMessage(requestError))
     }
