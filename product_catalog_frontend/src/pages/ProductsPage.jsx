@@ -121,38 +121,50 @@ export default function ProductsPage() {
 
   return (
     <>
-      <div className="page-heading">
+      <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <p className="eyebrow">INVENTARIO</p>
-          <h1>Productos</h1>
-          <p className="muted">Administra tus productos y sus categorías.</p>
+          <p className="mb-2 text-[10px] font-bold tracking-[0.15em] text-slate-500">INVENTARIO</p>
+          <h1 className="mb-2 font-display text-3xl font-extrabold tracking-tight text-slate-900">
+            Productos
+          </h1>
+          <p className="text-sm text-slate-500">Administra tus productos y sus categorías.</p>
         </div>
-        <button className="button button-primary" onClick={startCreate}>
+        <button
+          className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 sm:w-auto"
+          onClick={startCreate}
+        >
           ＋ Nuevo producto
         </button>
       </div>
 
       {error && (
-        <p className="error-message" role="alert">
+        <p className="mb-4 rounded-lg bg-red-50 px-3 py-2.5 text-sm text-red-700" role="alert">
           {error}
         </p>
       )}
 
       {editing !== null && (
-        <form className="panel product-form" onSubmit={submit}>
-          <h2>{editing === 'new' ? 'Nuevo producto' : 'Editar producto'}</h2>
-          <div className="form-grid">
-            <label>
+        <form
+          className="mb-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
+          onSubmit={submit}
+        >
+          <h2 className="mb-5 font-display text-lg font-bold text-slate-900">
+            {editing === 'new' ? 'Nuevo producto' : 'Editar producto'}
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
               Nombre
               <input
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                 required
                 value={form.name}
                 onChange={(event) => setForm({ ...form, name: event.target.value })}
               />
             </label>
-            <label>
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
               Precio
               <input
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                 type="number"
                 min="0.01"
                 step="0.01"
@@ -161,16 +173,18 @@ export default function ProductsPage() {
                 onChange={(event) => setForm({ ...form, price: event.target.value })}
               />
             </label>
-            <label className="span-two">
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700 sm:col-span-2">
               Descripción
               <textarea
+                className="min-h-20 w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                 value={form.description}
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
               />
             </label>
-            <label className="span-two">
+            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700 sm:col-span-2">
               Categorías
               <select
+                className="min-h-28 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                 multiple
                 value={form.categoryIds.map(String)}
                 onChange={(event) =>
@@ -186,28 +200,41 @@ export default function ProductsPage() {
                   </option>
                 ))}
               </select>
-              <small>Mantén Ctrl (Windows) o Cmd (Mac) para elegir varias.</small>
+              <small className="text-xs font-normal text-slate-500">
+                Mantén Ctrl (Windows) o Cmd (Mac) para elegir varias.
+              </small>
             </label>
           </div>
-          <div className="form-actions">
-            <button type="button" className="button button-light" onClick={() => setEditing(null)}>
+          <div className="mt-5 flex flex-col-reverse justify-end gap-2 sm:flex-row">
+            <button
+              type="button"
+              className="w-full rounded-lg bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 sm:w-auto"
+              onClick={() => setEditing(null)}
+            >
               Cancelar
             </button>
-            <button className="button button-primary" disabled={saving}>
+            <button
+              className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+              disabled={saving}
+            >
               {saving ? 'Guardando…' : 'Guardar producto'}
             </button>
           </div>
         </form>
       )}
 
-      <section className="panel">
-        <div className="table-toolbar">
-          <h2>
-            Listado <span className="count">{products.totalElements}</span>
+      <section className="mb-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <div className="mb-4 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
+          <h2 className="font-display text-lg font-bold text-slate-900">
+            Listado{' '}
+            <span className="ml-1 inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-indigo-50 px-2 text-xs font-semibold text-indigo-700">
+              {products.totalElements}
+            </span>
           </h2>
-          <label className="filter-label">
-            Filtrar por categoría
+          <label className="flex w-full flex-col gap-2 text-xs font-medium text-slate-600 sm:w-auto sm:flex-row sm:items-center">
+            <span className="shrink-0">Filtrar por categoría</span>
             <select
+              className="w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:min-w-44"
               value={categoryId}
               onChange={(event) => {
                 setPage(0)
@@ -225,42 +252,65 @@ export default function ProductsPage() {
         </div>
 
         {loading ? (
-          <p className="loading">Cargando productos…</p>
+          <p className="m-0 py-8 text-center text-sm text-slate-500">Cargando productos…</p>
         ) : products.content.length === 0 ? (
-          <p className="empty-state">No hay productos para mostrar.</p>
+          <p className="m-0 py-8 text-center text-sm text-slate-500">
+            No hay productos para mostrar.
+          </p>
         ) : (
-          <div className="table-scroll">
-            <table>
+          <div className="w-full overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left">
               <thead>
                 <tr>
-                  <th>Producto</th>
-                  <th>Precio</th>
-                  <th>Categorías</th>
-                  <th>Acciones</th>
+                  <th className="border-b border-slate-200 bg-slate-50 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Producto
+                  </th>
+                  <th className="border-b border-slate-200 bg-slate-50 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Precio
+                  </th>
+                  <th className="border-b border-slate-200 bg-slate-50 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Categorías
+                  </th>
+                  <th className="border-b border-slate-200 bg-slate-50 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {products.content.map((product) => (
                   <tr key={product.id}>
-                    <td>
-                      <strong>{product.name}</strong>
-                      <small>{product.description || 'Sin descripción'}</small>
+                    <td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-600">
+                      <strong className="font-semibold text-slate-900">{product.name}</strong>
+                      <small className="mt-1 block max-w-[360px] truncate text-xs text-slate-400">
+                        {product.description || 'Sin descripción'}
+                      </small>
                     </td>
-                    <td>${Number(product.price).toFixed(2)}</td>
-                    <td>
-                      <div className="tags">
+                    <td className="border-b border-slate-100 px-3 py-3 text-sm text-slate-600">
+                      ${Number(product.price).toFixed(2)}
+                    </td>
+                    <td className="border-b border-slate-100 px-3 py-3">
+                      <div className="flex flex-wrap gap-1">
                         {product.categories.map((category) => (
-                          <span className="tag" key={category.id}>
+                          <span
+                            className="inline-flex rounded-md bg-indigo-50 px-2 py-1 text-[10px] font-semibold text-indigo-700"
+                            key={category.id}
+                          >
                             {category.name}
                           </span>
                         ))}
                       </div>
                     </td>
-                    <td className="actions">
-                      <button className="text-button" onClick={() => startEdit(product)}>
+                    <td className="whitespace-nowrap border-b border-slate-100 px-3 py-3">
+                      <button
+                        className="px-1 py-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800"
+                        onClick={() => startEdit(product)}
+                      >
                         Editar
                       </button>
-                      <button className="text-button danger" onClick={() => remove(product)}>
+                      <button
+                        className="ml-2 px-1 py-1 text-xs font-semibold text-red-600 hover:text-red-800"
+                        onClick={() => remove(product)}
+                      >
                         Eliminar
                       </button>
                     </td>

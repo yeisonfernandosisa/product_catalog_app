@@ -88,7 +88,7 @@ Si configuraste `ADMIN_EMAIL` o `ADMIN_PASSWORD` en `.env`, usa esos valores. El
 
 ## Decisiones técnicas
 
-- Spring Boot organiza la API por controladores, servicios, repositorios, DTOs y entidades. React separa páginas, componentes reutilizables, autenticación y llamadas HTTP.
+- Spring Boot organiza la API por controladores, servicios, repositorios, DTOs y entidades. React separa páginas, componentes reutilizables, autenticación y llamadas HTTP; Tailwind CSS 4 aplica estilos adaptables a móvil, tableta y escritorio.
 - PostgreSQL almacena los datos. Spring Data JPA implementa el acceso paginado.
 - JWT protege las rutas autenticadas; Spring Security aplica los roles y BCrypt cifra las contraseñas.
 - `POST /api/auth/logout` revoca el JWT actual y elimina el token del navegador. La revocación se guarda en PostgreSQL hasta que el token expire; los registros vencidos se limpian al cerrar otra sesión.
