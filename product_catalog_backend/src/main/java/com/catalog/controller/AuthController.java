@@ -1,10 +1,10 @@
 package com.catalog.controller;
 
-import com.catalog.dto.AuthDTO.AuthResponseDTO;
-import com.catalog.dto.AuthDTO.LoginRequestDTO;
-import com.catalog.dto.AuthDTO.RegisterRequestDTO;
-import com.catalog.dto.AuthDTO.UpdateProfileRequestDTO;
-import com.catalog.dto.AuthDTO.UserResponseDTO;
+import com.catalog.dto.AuthResponseDTO;
+import com.catalog.dto.LoginRequestDTO;
+import com.catalog.dto.RegisterRequestDTO;
+import com.catalog.dto.UpdateProfileRequestDTO;
+import com.catalog.dto.UserResponseDTO;
 import com.catalog.service.TokenRevocationService;
 import com.catalog.service.UserService;
 import jakarta.validation.Valid;
@@ -48,12 +48,12 @@ public class AuthController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/me")
+  @GetMapping("/profile")
   public UserResponseDTO profile(Authentication auth) {
     return service.profile(auth.getName());
   }
 
-  @PutMapping("/me")
+  @PutMapping("/profile")
   public AuthResponseDTO updateProfile(
       Authentication auth, @Valid @RequestBody UpdateProfileRequestDTO request) {
     return service.updateProfile(auth.getName(), request, auth.getName());

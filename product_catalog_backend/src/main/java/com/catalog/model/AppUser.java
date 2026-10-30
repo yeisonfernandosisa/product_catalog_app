@@ -12,66 +12,68 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "app_users")
 public class AppUser extends AuditableEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private String fullName;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-  @Column(nullable = false)
-  private String password;
+    @Column(nullable = false)
+    private String fullName;
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private Role role;
+    @Column(nullable = false)
+    private String password;
 
-  protected AppUser() {}
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
-  public AppUser(String email, String fullName, String password, Role role) {
-    this.email = email;
-    this.fullName = fullName;
-    this.password = password;
-    this.role = role;
-    initializeAudit(email);
-  }
+    protected AppUser() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public AppUser(String email, String fullName, String password, Role role) {
+        this.email = email;
+        this.fullName = fullName;
+        this.password = password;
+        this.role = role;
+        initializeAudit(email);
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public String getFullName() {
-    return fullName;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
+    public String getFullName() {
+        return fullName;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public Role getRole() {
-    return role;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public void setRole(Role role) {
-    this.role = role;
-  }
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

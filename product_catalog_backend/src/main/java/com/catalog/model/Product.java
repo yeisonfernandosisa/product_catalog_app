@@ -1,5 +1,9 @@
 package com.catalog.model;
 
+import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,82 +12,81 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
 public class Product extends AuditableEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @Column(nullable = false)
-  private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(length = 2000)
-  private String description;
+    @Column(nullable = false)
+    private String name;
 
-  @Column(nullable = false, precision = 12, scale = 2)
-  private BigDecimal price;
+    @Column(length = 2000)
+    private String description;
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<ProductCategory> productCategories = new LinkedHashSet<>();
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal price;
 
-  protected Product() {}
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductCategory> productCategories = new LinkedHashSet<>();
 
-  public Product(String name, String description, BigDecimal price, String actor) {
-    this.name = name;
-    this.description = description;
-    this.price = price;
-    initializeAudit(actor);
-  }
+    protected Product() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Product(String name, String description, BigDecimal price, String actor) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        initializeAudit(actor);
+    }
 
-  public String getName() {
-    return name;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public BigDecimal getPrice() {
-    return price;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setPrice(BigDecimal price) {
-    this.price = price;
-  }
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-  public Set<ProductCategory> getProductCategories() {
-    return productCategories;
-  }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
-  public void assignCategories(Set<Category> categories, String actor) {
-    productCategories.removeIf(
-        link ->
-            categories.stream()
-                .noneMatch(category -> category.getId().equals(link.getCategory().getId())));
-    Set<Long> assignedIds =
-        productCategories.stream()
-            .map(link -> link.getCategory().getId())
-            .collect(java.util.stream.Collectors.toSet());
-    categories.stream()
-        .filter(category -> !assignedIds.contains(category.getId()))
-        .map(category -> new ProductCategory(this, category, actor))
-        .forEach(productCategories::add);
-  }
+    public Set<ProductCategory> getProductCategories() {
+        return productCategories;
+    }
+
+    public void assignCategories(Set<Category> categories, String actor) {
+        productCategories.removeIf(
+                link
+                -> categories.stream()
+                        .noneMatch(category -> category.getId().equals(link.getCategory().getId())));
+        Set<Long> assignedIds
+                = productCategories.stream()
+                        .map(link -> link.getCategory().getId())
+                        .collect(java.util.stream.Collectors.toSet());
+        categories.stream()
+                .filter(category -> !assignedIds.contains(category.getId()))
+                .map(category -> new ProductCategory(this, category, actor))
+                .forEach(productCategories::add);
+    }
 }

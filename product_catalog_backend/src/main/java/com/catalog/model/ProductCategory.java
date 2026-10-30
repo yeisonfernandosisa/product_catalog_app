@@ -12,34 +12,36 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(
-    name = "product_categories",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "category_id"}))
+        name = "product_categories",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "category_id"}))
 public class ProductCategory extends AuditableEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "product_id", nullable = false)
-  private Product product;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "category_id", nullable = false)
-  private Category category;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-  protected ProductCategory() {}
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-  public ProductCategory(Product product, Category category, String actor) {
-    this.product = product;
-    this.category = category;
-    initializeAudit(actor);
-  }
+    protected ProductCategory() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public ProductCategory(Product product, Category category, String actor) {
+        this.product = product;
+        this.category = category;
+        initializeAudit(actor);
+    }
 
-  public Category getCategory() {
-    return category;
-  }
+    public Long getId() {
+        return id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
 }

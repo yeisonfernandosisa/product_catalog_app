@@ -1,5 +1,8 @@
 package com.catalog.model;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,44 +11,44 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(
-    name = "categories",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"name", "created_by"}))
+        name = "categories",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "created_by"}))
 public class Category extends AuditableEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @Column(nullable = false)
-  private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @OneToMany(mappedBy = "category")
-  private Set<ProductCategory> productCategories = new LinkedHashSet<>();
+    @Column(nullable = false)
+    private String name;
 
-  protected Category() {}
+    @OneToMany(mappedBy = "category")
+    private Set<ProductCategory> productCategories = new LinkedHashSet<>();
 
-  public Category(String name, String actor) {
-    this.name = name;
-    initializeAudit(actor);
-  }
+    protected Category() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Category(String name, String actor) {
+        this.name = name;
+        initializeAudit(actor);
+    }
 
-  public String getName() {
-    return name;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Set<ProductCategory> getProductCategories() {
-    return productCategories;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<ProductCategory> getProductCategories() {
+        return productCategories;
+    }
 }

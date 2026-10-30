@@ -24,7 +24,7 @@
       "item": [
         {
           "name": "Consultar perfil",
-          "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" }
+          "request": { "method": "GET", "url": "{{baseUrl}}/auth/profile" }
         },
         {
           "name": "Actualizar nombre y contraseña opcional",
@@ -32,7 +32,7 @@
             "method": "PUT",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Usuario actualizado\"\n}" },
-            "url": "{{baseUrl}}/auth/me"
+            "url": "{{baseUrl}}/auth/profile"
           }
         }
       ]

@@ -1,11 +1,11 @@
 package com.catalog.service;
 
-import com.catalog.dto.AuthDTO.AuthResponseDTO;
-import com.catalog.dto.AuthDTO.LoginRequestDTO;
-import com.catalog.dto.AuthDTO.RegisterRequestDTO;
-import com.catalog.dto.AuthDTO.UpdateProfileRequestDTO;
-import com.catalog.dto.AuthDTO.UpdateUserRequestDTO;
-import com.catalog.dto.AuthDTO.UserResponseDTO;
+import com.catalog.dto.AuthResponseDTO;
+import com.catalog.dto.LoginRequestDTO;
+import com.catalog.dto.RegisterRequestDTO;
+import com.catalog.dto.UpdateProfileRequestDTO;
+import com.catalog.dto.UpdateUserRequestDTO;
+import com.catalog.dto.UserResponseDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Role;
 import com.catalog.repository.UserRepository;

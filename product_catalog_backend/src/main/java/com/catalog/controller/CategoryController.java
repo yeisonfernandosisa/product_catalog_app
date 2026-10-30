@@ -1,8 +1,5 @@
 package com.catalog.controller;
 
-import com.catalog.dto.CategoryDTO;
-import com.catalog.service.CategoryService;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,41 +14,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.catalog.dto.CategoryDTO;
+import com.catalog.service.CategoryService;
+
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-  private final CategoryService service;
 
-  public CategoryController(CategoryService service) {
-    this.service = service;
-  }
+    private final CategoryService service;
 
-  @GetMapping
-  public Page<CategoryDTO> list(
-      Authentication auth,
-      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
-          Pageable pageable) {
-    return service.categories(auth.getName(), pageable);
-  }
+    public CategoryController(CategoryService service) {
+        this.service = service;
+    }
 
-  @GetMapping("/{id}")
-  public CategoryDTO get(Authentication auth, @PathVariable Long id) {
-    return service.category(auth.getName(), id);
-  }
+    @GetMapping
+    public Page<CategoryDTO> list(
+            Authentication auth,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return service.categories(auth.getName(), pageable);
+    }
 
-  @PostMapping
-  public CategoryDTO create(Authentication auth, @Valid @RequestBody CategoryDTO request) {
-    return service.createCategory(auth.getName(), request);
-  }
+    @GetMapping("/{id}")
+    public CategoryDTO get(Authentication auth, @PathVariable Long id) {
+        return service.category(auth.getName(), id);
+    }
 
-  @PutMapping("/{id}")
-  public CategoryDTO update(
-      Authentication auth, @PathVariable Long id, @Valid @RequestBody CategoryDTO request) {
-    return service.updateCategory(auth.getName(), id, request);
-  }
+    @PostMapping
+    public CategoryDTO create(Authentication auth, @Valid @RequestBody CategoryDTO request) {
+        return service.createCategory(auth.getName(), request);
+    }
 
-  @DeleteMapping("/{id}")
-  public void delete(Authentication auth, @PathVariable Long id) {
-    service.deleteCategory(auth.getName(), id);
-  }
+    @PutMapping("/{id}")
+    public CategoryDTO update(
+            Authentication auth, @PathVariable Long id, @Valid @RequestBody CategoryDTO request) {
+        return service.updateCategory(auth.getName(), id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(Authentication auth, @PathVariable Long id) {
+        service.deleteCategory(auth.getName(), id);
+    }
 }

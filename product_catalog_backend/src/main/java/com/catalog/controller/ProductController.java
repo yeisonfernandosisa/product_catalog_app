@@ -1,8 +1,5 @@
 package com.catalog.controller;
 
-import com.catalog.dto.ProductDTO;
-import com.catalog.service.ProductService;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,42 +15,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.catalog.dto.ProductDTO;
+import com.catalog.service.ProductService;
+
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-  private final ProductService service;
 
-  public ProductController(ProductService service) {
-    this.service = service;
-  }
+    private final ProductService service;
 
-  @GetMapping
-  public Page<ProductDTO> list(
-      Authentication auth,
-      @RequestParam(required = false) Long categoryId,
-      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
-          Pageable pageable) {
-    return service.products(auth.getName(), categoryId, pageable);
-  }
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
 
-  @GetMapping("/{id}")
-  public ProductDTO get(Authentication auth, @PathVariable Long id) {
-    return service.product(auth.getName(), id);
-  }
+    @GetMapping
+    public Page<ProductDTO> list(
+            Authentication auth,
+            @RequestParam(required = false) Long categoryId,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return service.products(auth.getName(), categoryId, pageable);
+    }
 
-  @PostMapping
-  public ProductDTO create(Authentication auth, @Valid @RequestBody ProductDTO request) {
-    return service.createProduct(auth.getName(), request);
-  }
+    @GetMapping("/{id}")
+    public ProductDTO get(Authentication auth, @PathVariable Long id) {
+        return service.product(auth.getName(), id);
+    }
 
-  @PutMapping("/{id}")
-  public ProductDTO update(
-      Authentication auth, @PathVariable Long id, @Valid @RequestBody ProductDTO request) {
-    return service.updateProduct(auth.getName(), id, request);
-  }
+    @PostMapping
+    public ProductDTO create(Authentication auth, @Valid @RequestBody ProductDTO request) {
+        return service.createProduct(auth.getName(), request);
+    }
 
-  @DeleteMapping("/{id}")
-  public void delete(Authentication auth, @PathVariable Long id) {
-    service.deleteProduct(auth.getName(), id);
-  }
+    @PutMapping("/{id}")
+    public ProductDTO update(
+            Authentication auth, @PathVariable Long id, @Valid @RequestBody ProductDTO request) {
+        return service.updateProduct(auth.getName(), id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(Authentication auth, @PathVariable Long id) {
+        service.deleteProduct(auth.getName(), id);
+    }
 }

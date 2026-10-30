@@ -6,6 +6,6 @@ export const register = (data) => api.post('/auth/register', data).then((respons
 
 export const logout = () => api.post('/auth/logout')
 
-export const getProfile = () => api.get('/auth/me').then((response) => response.data)
+export const getProfile = () => api.get('/auth/profile').then((response) => response.data)
 
-export const updateProfile = (data) => api.put('/auth/me', data).then((response) => response.data)
+export const updateProfile = (data) => api.put('/auth/profile', data).then((response) => response.data)
