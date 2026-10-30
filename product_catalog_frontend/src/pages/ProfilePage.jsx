@@ -19,10 +19,29 @@ export default function ProfilePage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    getProfile()
-      .then((profile) => setForm((current) => ({ ...current, ...profile })))
-      .catch((requestError) => setError(errorMessage(requestError)))
-      .finally(() => setLoading(false))
+    let isActive = true
+
+    async function loadProfile() {
+      try {
+        const profile = await getProfile()
+        if (isActive) {
+          setForm((current) => ({ ...current, ...profile }))
+        }
+      } catch (requestError) {
+        if (isActive) {
+          setError(errorMessage(requestError))
+        }
+      } finally {
+        if (isActive) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadProfile()
+    return () => {
+      isActive = false
+    }
   }, [])
 
   async function submit(event) {
