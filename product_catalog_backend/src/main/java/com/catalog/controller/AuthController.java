@@ -1,10 +1,10 @@
 package com.catalog.controller;
 
-import com.catalog.dto.AuthDtos.AuthResponse;
-import com.catalog.dto.AuthDtos.LoginRequest;
-import com.catalog.dto.AuthDtos.RegisterRequest;
-import com.catalog.dto.AuthDtos.UpdateProfileRequest;
-import com.catalog.dto.AuthDtos.UserResponse;
+import com.catalog.dto.AuthDTO.AuthResponseDTO;
+import com.catalog.dto.AuthDTO.LoginRequestDTO;
+import com.catalog.dto.AuthDTO.RegisterRequestDTO;
+import com.catalog.dto.AuthDTO.UpdateProfileRequestDTO;
+import com.catalog.dto.AuthDTO.UserResponseDTO;
 import com.catalog.service.TokenRevocationService;
 import com.catalog.service.UserService;
 import jakarta.validation.Valid;
@@ -31,12 +31,12 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
+  public AuthResponseDTO register(@Valid @RequestBody RegisterRequestDTO request) {
     return service.register(request);
   }
 
   @PostMapping("/login")
-  public AuthResponse login(@Valid @RequestBody LoginRequest request) {
+  public AuthResponseDTO login(@Valid @RequestBody LoginRequestDTO request) {
     return service.login(request);
   }
 
@@ -49,13 +49,13 @@ public class AuthController {
   }
 
   @GetMapping("/me")
-  public UserResponse profile(Authentication auth) {
+  public UserResponseDTO profile(Authentication auth) {
     return service.profile(auth.getName());
   }
 
   @PutMapping("/me")
-  public AuthResponse updateProfile(
-      Authentication auth, @Valid @RequestBody UpdateProfileRequest request) {
+  public AuthResponseDTO updateProfile(
+      Authentication auth, @Valid @RequestBody UpdateProfileRequestDTO request) {
     return service.updateProfile(auth.getName(), request, auth.getName());
   }
 }

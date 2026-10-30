@@ -1,8 +1,8 @@
 package com.catalog.service;
 
-import com.catalog.dto.CatalogDtos.CategoryResponse;
-import com.catalog.dto.CatalogDtos.ProductRequest;
-import com.catalog.dto.CatalogDtos.ProductResponse;
+import com.catalog.dto.CategoryDTO.CategoryResponseDTO;
+import com.catalog.dto.ProductDTO.ProductRequestDTO;
+import com.catalog.dto.ProductDTO.ProductResponseDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Category;
 import com.catalog.model.Product;
@@ -33,7 +33,7 @@ public class ProductService {
   }
 
   @Transactional(readOnly = true)
-  public Page<ProductResponse> products(String email, Long categoryId, Pageable pageable) {
+  public Page<ProductResponseDTO> products(String email, Long categoryId, Pageable pageable) {
     String createdBy = requireUser(email).getEmail();
     Page<Product> result =
         categoryId == null
@@ -45,31 +45,35 @@ public class ProductService {
   }
 
   @Transactional(readOnly = true)
-  public ProductResponse product(String email, Long id) {
+  public ProductResponseDTO product(String email, Long id) {
     Product product = findOwnedProduct(email, id);
     return toResponse(product);
   }
 
   @Transactional
-  public ProductResponse createProduct(String email, ProductRequest request) {
+  public ProductResponseDTO createProduct(String email, ProductRequestDTO request) {
     String createdBy = requireUser(email).getEmail();
     Product product =
         products.saveAndFlush(
-            new Product(request.name().trim(), request.description(), request.price(), createdBy));
-    product.assignCategories(resolveCategories(request.categoryIds(), createdBy), email);
+            new Product(
+                request.getName().trim(),
+                request.getDescription(),
+                request.getPrice(),
+                createdBy));
+    product.assignCategories(resolveCategories(request.getCategoryIds(), createdBy), email);
 
     return toResponse(products.save(product));
   }
 
   @Transactional
-  public ProductResponse updateProduct(String email, Long id, ProductRequest request) {
+  public ProductResponseDTO updateProduct(String email, Long id, ProductRequestDTO request) {
     Product product = findOwnedProduct(email, id);
     product.setUpdatedBy(email);
-    product.setName(request.name().trim());
-    product.setDescription(request.description());
-    product.setPrice(request.price());
+    product.setName(request.getName().trim());
+    product.setDescription(request.getDescription());
+    product.setPrice(request.getPrice());
     product.assignCategories(
-        resolveCategories(request.categoryIds(), product.getCreatedBy()), email);
+        resolveCategories(request.getCategoryIds(), product.getCreatedBy()), email);
 
     return toResponse(product);
   }
@@ -110,14 +114,14 @@ public class ProductService {
             () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesión no válida"));
   }
 
-  private ProductResponse toResponse(Product product) {
-    Set<CategoryResponse> categoryResponses =
+  private ProductResponseDTO toResponse(Product product) {
+    Set<CategoryResponseDTO> categoryResponses =
         product.getProductCategories().stream()
             .map(link -> link.getCategory())
-            .map(category -> new CategoryResponse(category.getId(), category.getName()))
+            .map(category -> new CategoryResponseDTO(category.getId(), category.getName()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
 
-    return new ProductResponse(
+    return new ProductResponseDTO(
         product.getId(),
         product.getName(),
         product.getDescription(),

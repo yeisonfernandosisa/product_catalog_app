@@ -1,11 +1,11 @@
 package com.catalog.service;
 
-import com.catalog.dto.AuthDtos.AuthResponse;
-import com.catalog.dto.AuthDtos.LoginRequest;
-import com.catalog.dto.AuthDtos.RegisterRequest;
-import com.catalog.dto.AuthDtos.UpdateProfileRequest;
-import com.catalog.dto.AuthDtos.UpdateUserRequest;
-import com.catalog.dto.AuthDtos.UserResponse;
+import com.catalog.dto.AuthDTO.AuthResponseDTO;
+import com.catalog.dto.AuthDTO.LoginRequestDTO;
+import com.catalog.dto.AuthDTO.RegisterRequestDTO;
+import com.catalog.dto.AuthDTO.UpdateProfileRequestDTO;
+import com.catalog.dto.AuthDTO.UpdateUserRequestDTO;
+import com.catalog.dto.AuthDTO.UserResponseDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Role;
 import com.catalog.repository.UserRepository;
@@ -38,8 +38,8 @@ public class UserService {
   }
 
   @Transactional
-  public AuthResponse register(RegisterRequest request) {
-    String email = normalizeEmail(request.email());
+  public AuthResponseDTO register(RegisterRequestDTO request) {
+    String email = normalizeEmail(request.getEmail());
     if (users.existsByEmail(email)) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "El correo ya está registrado");
     }
@@ -47,19 +47,22 @@ public class UserService {
     AppUser user =
         users.save(
             new AppUser(
-                email, request.fullName().trim(), encoder.encode(request.password()), Role.USER));
+                email,
+                request.getFullName().trim(),
+                encoder.encode(request.getPassword()),
+                Role.USER));
     return authResponse(user);
   }
 
-  public AuthResponse login(LoginRequest request) {
+  public AuthResponseDTO login(LoginRequestDTO request) {
     AppUser user =
         users
-            .findByEmail(normalizeEmail(request.email()))
+            .findByEmail(normalizeEmail(request.getEmail()))
             .orElseThrow(
                 () ->
                     new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos"));
-    if (!encoder.matches(request.password(), user.getPassword())) {
+    if (!encoder.matches(request.getPassword(), user.getPassword())) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrectos");
     }
 
@@ -67,12 +70,12 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public Page<UserResponse> list(Pageable pageable) {
+  public Page<UserResponseDTO> list(Pageable pageable) {
     return users.findAll(pageable).map(this::response);
   }
 
   @Transactional(readOnly = true)
-  public UserResponse profile(String email) {
+  public UserResponseDTO profile(String email) {
     return response(
         users
             .findByEmail(email)
@@ -81,42 +84,43 @@ public class UserService {
   }
 
   @Transactional
-  public AuthResponse updateProfile(String email, UpdateProfileRequest request, String actor) {
+  public AuthResponseDTO updateProfile(
+      String email, UpdateProfileRequestDTO request, String actor) {
     AppUser user =
         users
             .findByEmail(email)
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-    user.setFullName(request.fullName().trim());
+    user.setFullName(request.getFullName().trim());
     user.setUpdatedBy(actor);
-    if (request.password() != null && !request.password().isBlank()) {
-      user.setPassword(encoder.encode(request.password()));
+    if (request.getPassword() != null && !request.getPassword().isBlank()) {
+      user.setPassword(encoder.encode(request.getPassword()));
     }
 
     return authResponse(user);
   }
 
   @Transactional
-  public UserResponse update(Long id, UpdateUserRequest request, String actor) {
+  public UserResponseDTO update(Long id, UpdateUserRequestDTO request, String actor) {
     AppUser user =
         users
             .findById(id)
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-    String email = normalizeEmail(request.email());
+    String email = normalizeEmail(request.getEmail());
     if (!user.getEmail().equals(email) && users.existsByEmail(email)) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "El correo ya está registrado");
     }
 
     catalogOwnership.transferToNewEmail(user.getEmail(), email, actor);
     user.setEmail(email);
-    user.setFullName(request.fullName().trim());
+    user.setFullName(request.getFullName().trim());
     user.setUpdatedBy(actor);
-    if (request.role() != null) {
-      user.setRole(request.role());
+    if (request.getRole() != null) {
+      user.setRole(request.getRole());
     }
-    if (request.password() != null && !request.password().isBlank()) {
-      user.setPassword(encoder.encode(request.password()));
+    if (request.getPassword() != null && !request.getPassword().isBlank()) {
+      user.setPassword(encoder.encode(request.getPassword()));
     }
 
     return response(user);
@@ -126,12 +130,13 @@ public class UserService {
     return email.trim().toLowerCase(Locale.ROOT);
   }
 
-  private AuthResponse authResponse(AppUser user) {
-    return new AuthResponse(
+  private AuthResponseDTO authResponse(AppUser user) {
+    return new AuthResponseDTO(
         jwt.generate(user), user.getEmail(), user.getFullName(), user.getRole());
   }
 
-  private UserResponse response(AppUser user) {
-    return new UserResponse(user.getId(), user.getEmail(), user.getFullName(), user.getRole());
+  private UserResponseDTO response(AppUser user) {
+    return new UserResponseDTO(
+        user.getId(), user.getEmail(), user.getFullName(), user.getRole());
   }
 }

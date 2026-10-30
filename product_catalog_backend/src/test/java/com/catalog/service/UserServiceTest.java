@@ -5,7 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.catalog.dto.AuthDtos.UpdateUserRequest;
+import com.catalog.dto.AuthDTO.UpdateUserRequestDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Role;
 import com.catalog.repository.CategoryRepository;
@@ -40,7 +40,9 @@ class UserServiceTest {
     when(users.findById(1L)).thenReturn(Optional.of(user));
 
     service.update(
-        1L, new UpdateUserRequest("new@example.com", "User", Role.USER, null), "admin@example.com");
+        1L,
+        new UpdateUserRequestDTO("new@example.com", "User", Role.USER, null),
+        "admin@example.com");
 
     verify(products).transferCreatedBy("old@example.com", "new@example.com", "admin@example.com");
     verify(categories).transferCreatedBy("old@example.com", "new@example.com", "admin@example.com");
@@ -53,7 +55,7 @@ class UserServiceTest {
 
     service.update(
         1L,
-        new UpdateUserRequest("user@example.com", "User", Role.USER, null),
+        new UpdateUserRequestDTO("user@example.com", "User", Role.USER, null),
         "admin@example.com");
 
     verify(products, never())

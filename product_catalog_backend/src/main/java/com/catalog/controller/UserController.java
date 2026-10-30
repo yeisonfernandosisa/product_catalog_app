@@ -1,7 +1,7 @@
 package com.catalog.controller;
 
-import com.catalog.dto.AuthDtos.UpdateUserRequest;
-import com.catalog.dto.AuthDtos.UserResponse;
+import com.catalog.dto.AuthDTO.UpdateUserRequestDTO;
+import com.catalog.dto.AuthDTO.UserResponseDTO;
 import com.catalog.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -26,15 +26,17 @@ public class UserController {
   }
 
   @GetMapping
-  public Page<UserResponse> list(
+  public Page<UserResponseDTO> list(
       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
           Pageable pageable) {
     return service.list(pageable);
   }
 
   @PutMapping("/{id}")
-  public UserResponse update(
-      Authentication auth, @PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
+  public UserResponseDTO update(
+      Authentication auth,
+      @PathVariable Long id,
+      @Valid @RequestBody UpdateUserRequestDTO request) {
     return service.update(id, request, auth.getName());
   }
 }

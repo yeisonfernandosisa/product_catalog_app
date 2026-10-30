@@ -1,7 +1,7 @@
 package com.catalog.service;
 
-import com.catalog.dto.CatalogDtos.CategoryRequest;
-import com.catalog.dto.CatalogDtos.CategoryResponse;
+import com.catalog.dto.CategoryDTO.CategoryRequestDTO;
+import com.catalog.dto.CategoryDTO.CategoryResponseDTO;
 import com.catalog.model.AppUser;
 import com.catalog.model.Category;
 import com.catalog.repository.CategoryRepository;
@@ -30,20 +30,20 @@ public class CategoryService {
   }
 
   @Transactional(readOnly = true)
-  public Page<CategoryResponse> categories(String email, Pageable pageable) {
+  public Page<CategoryResponseDTO> categories(String email, Pageable pageable) {
     String createdBy = requireUser(email).getEmail();
     return categories.findAllByCreatedBy(createdBy, pageable).map(this::toResponse);
   }
 
   @Transactional(readOnly = true)
-  public CategoryResponse category(String email, Long id) {
+  public CategoryResponseDTO category(String email, Long id) {
     return toResponse(findOwnedCategory(email, id));
   }
 
   @Transactional
-  public CategoryResponse createCategory(String email, CategoryRequest request) {
+  public CategoryResponseDTO createCategory(String email, CategoryRequestDTO request) {
     String createdBy = requireUser(email).getEmail();
-    String name = request.name().trim();
+    String name = request.getName().trim();
     if (categories.existsByNameIgnoreCaseAndCreatedBy(name, createdBy)) {
       throw new ResponseStatusException(
           HttpStatus.CONFLICT, "Ya existe una categoría con ese nombre");
@@ -53,9 +53,9 @@ public class CategoryService {
   }
 
   @Transactional
-  public CategoryResponse updateCategory(String email, Long id, CategoryRequest request) {
+  public CategoryResponseDTO updateCategory(String email, Long id, CategoryRequestDTO request) {
     Category category = findOwnedCategory(email, id);
-    String name = request.name().trim();
+    String name = request.getName().trim();
     if (!category.getName().equalsIgnoreCase(name)
         && categories.existsByNameIgnoreCaseAndCreatedBy(name, category.getCreatedBy())) {
       throw new ResponseStatusException(
@@ -95,7 +95,7 @@ public class CategoryService {
             () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesión no válida"));
   }
 
-  private CategoryResponse toResponse(Category category) {
-    return new CategoryResponse(category.getId(), category.getName());
+  private CategoryResponseDTO toResponse(Category category) {
+    return new CategoryResponseDTO(category.getId(), category.getName());
   }
 }

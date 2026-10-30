@@ -1,7 +1,7 @@
 package com.catalog.controller;
 
-import com.catalog.dto.CatalogDtos.CategoryRequest;
-import com.catalog.dto.CatalogDtos.CategoryResponse;
+import com.catalog.dto.CategoryDTO.CategoryRequestDTO;
+import com.catalog.dto.CategoryDTO.CategoryResponseDTO;
 import com.catalog.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class CategoryController {
   }
 
   @GetMapping
-  public Page<CategoryResponse> list(
+  public Page<CategoryResponseDTO> list(
       Authentication auth,
       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
           Pageable pageable) {
@@ -36,18 +36,19 @@ public class CategoryController {
   }
 
   @GetMapping("/{id}")
-  public CategoryResponse get(Authentication auth, @PathVariable Long id) {
+  public CategoryResponseDTO get(Authentication auth, @PathVariable Long id) {
     return service.category(auth.getName(), id);
   }
 
   @PostMapping
-  public CategoryResponse create(Authentication auth, @Valid @RequestBody CategoryRequest request) {
+  public CategoryResponseDTO create(
+      Authentication auth, @Valid @RequestBody CategoryRequestDTO request) {
     return service.createCategory(auth.getName(), request);
   }
 
   @PutMapping("/{id}")
-  public CategoryResponse update(
-      Authentication auth, @PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
+  public CategoryResponseDTO update(
+      Authentication auth, @PathVariable Long id, @Valid @RequestBody CategoryRequestDTO request) {
     return service.updateCategory(auth.getName(), id, request);
   }
 
