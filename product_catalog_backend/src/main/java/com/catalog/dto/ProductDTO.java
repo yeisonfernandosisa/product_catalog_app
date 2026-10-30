@@ -18,7 +18,7 @@ public class ProductDTO {
     private String name;
 
     private String description;
-    
+
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal price;

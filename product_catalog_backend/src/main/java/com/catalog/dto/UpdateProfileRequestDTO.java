@@ -7,7 +7,7 @@ public class UpdateProfileRequestDTO {
 
     @NotBlank
     private String fullName;
-    
+
     @Size(min = 8)
     private String password;
 

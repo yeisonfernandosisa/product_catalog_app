@@ -27,10 +27,9 @@ export default function Layout() {
         <nav className="order-3 flex w-full flex-1 items-center gap-5 overflow-x-auto text-sm lg:order-none lg:w-auto lg:gap-6">
           <NavLink
             className={({ isActive }) =>
-              `shrink-0 border-b-2 py-2 no-underline transition-colors ${
-                isActive
-                  ? 'border-indigo-600 text-indigo-700'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              `shrink-0 border-b-2 py-2 no-underline transition-colors ${isActive
+                ? 'border-indigo-600 text-indigo-700'
+                : 'border-transparent text-slate-500 hover:text-slate-900'
               }`
             }
             to="/"
@@ -39,10 +38,9 @@ export default function Layout() {
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              `shrink-0 border-b-2 py-2 no-underline transition-colors ${
-                isActive
-                  ? 'border-indigo-600 text-indigo-700'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              `shrink-0 border-b-2 py-2 no-underline transition-colors ${isActive
+                ? 'border-indigo-600 text-indigo-700'
+                : 'border-transparent text-slate-500 hover:text-slate-900'
               }`
             }
             to="/categories"
@@ -51,10 +49,9 @@ export default function Layout() {
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              `shrink-0 border-b-2 py-2 no-underline transition-colors ${
-                isActive
-                  ? 'border-indigo-600 text-indigo-700'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              `shrink-0 border-b-2 py-2 no-underline transition-colors ${isActive
+                ? 'border-indigo-600 text-indigo-700'
+                : 'border-transparent text-slate-500 hover:text-slate-900'
               }`
             }
             to="/profile"
@@ -64,10 +61,9 @@ export default function Layout() {
           {user?.role === 'ADMIN' && (
             <NavLink
               className={({ isActive }) =>
-                `shrink-0 border-b-2 py-2 no-underline transition-colors ${
-                  isActive
-                    ? 'border-indigo-600 text-indigo-700'
-                    : 'border-transparent text-slate-500 hover:text-slate-900'
+                `shrink-0 border-b-2 py-2 no-underline transition-colors ${isActive
+                  ? 'border-indigo-600 text-indigo-700'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
                 }`
               }
               to="/users"

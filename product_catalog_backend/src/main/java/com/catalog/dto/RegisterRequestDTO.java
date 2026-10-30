@@ -13,7 +13,7 @@ public class RegisterRequestDTO {
     @NotBlank
     @Size(min = 8)
     private String password;
-    
+
     @NotBlank
     private String fullName;
 
