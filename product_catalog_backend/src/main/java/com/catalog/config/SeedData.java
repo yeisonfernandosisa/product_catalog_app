@@ -11,13 +11,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SeedData {
-    @Bean
-    CommandLineRunner seedAdmin(UserRepository users, PasswordEncoder encoder,
-        @Value("${app.seed-admin.email:admin@example.com}") String email,
-        @Value("${app.seed-admin.password:Admin123!}") String password) {
-        return args -> {
-            if (!users.existsByEmail(email.toLowerCase()))
-                users.save(new AppUser(email.toLowerCase(), "Administrador", encoder.encode(password), Role.ADMIN));
-        };
-    }
+  @Bean
+  CommandLineRunner seedAdmin(
+      UserRepository users,
+      PasswordEncoder encoder,
+      @Value("${app.seed-admin.email:admin@example.com}") String email,
+      @Value("${app.seed-admin.password:Admin123!}") String password) {
+    return args -> {
+      if (!users.existsByEmail(email.toLowerCase()))
+        users.save(
+            new AppUser(
+                email.toLowerCase(), "Administrador", encoder.encode(password), Role.ADMIN));
+    };
+  }
 }

@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "format": "prettier --write \"src/**/*.{js,jsx,css}\" \"../README.md\" \"../docker-compose.yml\" \"../product_catalog_backend/src/main/resources/application.yml\" \"../postman_collection.json\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,css}\" \"../README.md\" \"../docker-compose.yml\" \"../product_catalog_backend/src/main/resources/application.yml\" \"../postman_collection.json\""
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -19,6 +21,7 @@
     "@testing-library/react": "^16.0.1",
     "@vitejs/plugin-react": "^6.1.2",
     "jsdom": "^25.0.1",
+    "prettier": "^3.9.10",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   }

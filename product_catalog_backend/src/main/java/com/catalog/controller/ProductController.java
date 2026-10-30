@@ -1,33 +1,60 @@
 package com.catalog.controller;
 
-import com.catalog.dto.CatalogDtos.*;
-import com.catalog.service.CatalogService;
+import com.catalog.dto.CatalogDtos.ProductRequest;
+import com.catalog.dto.CatalogDtos.ProductResponse;
+import com.catalog.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-    private final CatalogService service;
-    public ProductController(CatalogService service) { this.service = service; }
-    @GetMapping public Page<ProductResponse> list(Authentication auth, @RequestParam(required = false) Long categoryId,
-        @PageableDefault(size = 10, sort = "name") Pageable pageable) {
-        return service.products(auth.getName(), categoryId, pageable);
-    }
-    @GetMapping("/{id}") public ProductResponse get(Authentication auth, @PathVariable Long id) {
-        return service.product(auth.getName(), id);
-    }
-    @PostMapping public ProductResponse create(Authentication auth, @Valid @RequestBody ProductRequest request) {
-        return service.createProduct(auth.getName(), request);
-    }
-    @PutMapping("/{id}") public ProductResponse update(Authentication auth, @PathVariable Long id, @Valid @RequestBody ProductRequest request) {
-        return service.updateProduct(auth.getName(), id, request);
-    }
-    @DeleteMapping("/{id}") public void delete(Authentication auth, @PathVariable Long id) {
-        service.deleteProduct(auth.getName(), id);
-    }
+  private final ProductService service;
+
+  public ProductController(ProductService service) {
+    this.service = service;
+  }
+
+  @GetMapping
+  public Page<ProductResponse> list(
+      Authentication auth,
+      @RequestParam(required = false) Long categoryId,
+      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+          Pageable pageable) {
+    return service.products(auth.getName(), categoryId, pageable);
+  }
+
+  @GetMapping("/{id}")
+  public ProductResponse get(Authentication auth, @PathVariable Long id) {
+    return service.product(auth.getName(), id);
+  }
+
+  @PostMapping
+  public ProductResponse create(Authentication auth, @Valid @RequestBody ProductRequest request) {
+    return service.createProduct(auth.getName(), request);
+  }
+
+  @PutMapping("/{id}")
+  public ProductResponse update(
+      Authentication auth, @PathVariable Long id, @Valid @RequestBody ProductRequest request) {
+    return service.updateProduct(auth.getName(), id, request);
+  }
+
+  @DeleteMapping("/{id}")
+  public void delete(Authentication auth, @PathVariable Long id) {
+    service.deleteProduct(auth.getName(), id);
+  }
 }

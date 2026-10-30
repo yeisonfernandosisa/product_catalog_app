@@ -13,18 +13,26 @@ import './styles.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter><AuthProvider><Routes>
-      <Route path="/login" element={<AuthPage mode="login" />} />
-      <Route path="/register" element={<AuthPage mode="register" />} />
-      <Route element={<ProtectedRoute />}><Route element={<Layout />}>
-        <Route index element={<ProductsPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-      </Route></Route>
-      <Route element={<ProtectedRoute admin />}><Route element={<Layout />}>
-        <Route path="/users" element={<UsersPage />} />
-      </Route></Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes></AuthProvider></BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<AuthPage mode="login" />} />
+          <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<Layout />}>
+              <Route index element={<ProductsPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Route>
+          </Route>
+          <Route element={<ProtectedRoute admin />}>
+            <Route element={<Layout />}>
+              <Route path="/users" element={<UsersPage />} />
+            </Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 )
