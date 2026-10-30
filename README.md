@@ -48,16 +48,16 @@ Si ejecutas el backend por separado, crea esa base de datos en PostgreSQL. Por d
 
 El archivo `.env.example` muestra las variables disponibles. Cópialo como `.env` y configura estos valores:
 
-| Variable              | Para qué sirve                                                                                                 |
-| --------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `DB_URL`              | Dirección de la base de datos. Para ejecución local usa `jdbc:postgresql://localhost:5432/product_catalog_db`. |
-| `DB_USERNAME`         | Usuario de PostgreSQL.                                                                                         |
-| `DB_PASSWORD`         | Contraseña de PostgreSQL.                                                                                      |
-| `JWT_SECRET`          | Clave usada para las sesiones. Configura una clave aleatoria de al menos 32 caracteres.                        |
-| `ADMIN_EMAIL`         | Correo del administrador inicial.                                                                              |
-| `ADMIN_PASSWORD`      | Contraseña del administrador inicial.                                                                          |
-| `CORS_ALLOWED_ORIGIN` | Dirección permitida para el frontend; normalmente `http://localhost:5173`.                                     |
-| `VITE_API_URL`        | Dirección de la API; normalmente `http://localhost:8080/api`.                                                  |
+Estas son las variables y su función:
+
+- `DB_URL`: dirección de la base de datos. Para ejecución local usa `jdbc:postgresql://localhost:5432/product_catalog_db`.
+- `DB_USERNAME`: usuario de PostgreSQL.
+- `DB_PASSWORD`: contraseña de PostgreSQL.
+- `JWT_SECRET`: clave usada para las sesiones. Configura una clave aleatoria de al menos 32 caracteres.
+- `ADMIN_EMAIL`: correo del administrador inicial.
+- `ADMIN_PASSWORD`: contraseña del administrador inicial.
+- `CORS_ALLOWED_ORIGIN`: dirección permitida para el frontend; normalmente `http://localhost:5173`.
+- `VITE_API_URL`: dirección de la API; normalmente `http://localhost:8080/api`.
 
 Docker Compose lee las variables de `.env`. Si ejecutas los programas por separado, ese archivo no se carga automáticamente. En PowerShell, configura las variables en la terminal donde iniciarás el programa. Por ejemplo:
 
@@ -97,3 +97,35 @@ Si cambias `ADMIN_EMAIL` o `ADMIN_PASSWORD`, usa los datos que configuraste. Sin
 - Agregaría más pruebas para los flujos principales, incluyendo pruebas que usen una base de datos real.
 - Usaría Flyway para llevar un historial claro de los cambios en la base de datos.
 - Agregaría documentación de la API y mejores herramientas para revisar errores en producción.
+
+## Estructura del proyecto
+
+product_catalog_app/
+
+├── product_catalog_backend/           # API REST construida con Spring Boot
+│   ├── src/
+│   │   │   │   ├── config/            # Seguridad y carga de datos iniciales
+│   │   │   │   ├── controller/        # Recibe solicitudes HTTP y expone endpoints
+│   │   │   │   ├── dto/              # Define los datos de entrada(body) y respuesta(Response) de la API
+│   │   │   │   ├── model/             # Entidades que representan los datos del sistema
+│   │   │   │   ├── repository/        # Consultas y acceso a PostgreSQL con JPA
+│   │   │   │   ├── security/          # Validación de tokens y autenticación JWT
+│   │   │   │   └── service/           # Reglas y operaciones de negocio
+│   │   └── test/java/                 # Pruebas automatizadas de servicios del backend
+│   ├── Dockerfile                     # Instrucciones para construir la imagen del backend
+│   └── pom.xml                        # Dependencias y configuración de Maven
+
+├── product_catalog_frontend/          # Interfaz web construida con React y Vite
+│   ├── src/
+│   │   ├── __tests__/                 # Pruebas de componentes y páginas
+│   │   ├── api/                       # Funciones para comunicarse con los endpoints
+│   │   ├── auth/                      # Estado y contexto de la sesión del usuario
+│   │   ├── components/                # Elementos visuales reutilizados en varias páginas
+│   │   ├── pages/                     # Paginas de productos, categorías y usuarios
+│   ├── Dockerfile                     # Instrucciones para construir la imagen del frontend
+│   ├── package.json                   # Dependencias y comandos de desarrollo y pruebas
+│   ├── package-lock.json              # Versiones exactas de las dependencias instaladas
+│   └── vite.config.js                 # Configuración del servidor y pruebas con Vite
+├── .env.example                       # Plantilla de configuración para variables de entorno
+├── docker-compose.yml                 # Configura y conecta frontend, backend y base de datos
+├── postman_collection.json            # Solicitudes listas para probar la API con Postman
