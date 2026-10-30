@@ -1,72 +1,36 @@
 # Product Catalog
 
-Aplicación de catálogo con API REST en Java y Spring Boot, interfaz en React y base de datos PostgreSQL.
+## Instalar y ejecutar el backend y el frontend
 
-## Requisitos
+### Opción recomendada: Docker
 
-- Docker Desktop con Docker Compose, recomendado para ejecutar todo el proyecto.
-- Para ejecutar los proyectos por separado: Java 17, Maven 3.9 o posterior, Node.js 24 y PostgreSQL.
-
-## Instalar y ejecutar con Docker
-
-Desde la carpeta raíz del proyecto:
+Necesitas tener Docker Desktop instalado. Desde la carpeta principal del proyecto, copia el archivo de ejemplo:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Edita `.env` y configura al menos `DB_PASSWORD`, `JWT_SECRET` y `ADMIN_PASSWORD`. Luego ejecuta:
+Puedes dejar los valores de ejemplo para probar en tu computadora. Luego inicia la aplicación:
 
 ```powershell
-docker compose up --build -d
-docker compose ps
+docker compose up --build
 ```
 
-Servicios disponibles:
+Abre el frontend en <http://localhost:5173>. El backend estará en <http://localhost:8080>.
+Para detener todo, presiona `Ctrl+C` y ejecuta `docker compose down`.
 
-- Frontend: <http://localhost:5173>
-- Backend: <http://localhost:8080>
-- PostgreSQL: `localhost:5433`, base de datos `product_catalog_db`
+### Ejecutar backend y frontend por separado
 
-Para detener los servicios sin borrar los datos:
+Necesitas Java 17, Maven, Node.js y PostgreSQL. Crea la base de datos como se explica en la siguiente sección y configura las variables necesarias.
 
-```powershell
-docker compose down
-```
-
-Los datos de PostgreSQL se conservan en el volumen de Docker. No uses `docker compose down -v` salvo que quieras eliminar también la base de datos.
-
-## Configuración de base de datos y variables de entorno
-
-Docker crea la base `product_catalog_db` en el esquema `public`. En pgAdmin, registra un servidor con host `localhost`, puerto `5433`, y las credenciales definidas en `.env` (`DB_USERNAME` y `DB_PASSWORD`). El puerto `5432` puede corresponder a otra instalación local de PostgreSQL.
-
-Variables disponibles en `.env`:
-
-| Variable              | Uso                                                                             | Valor de ejemplo                                      |
-| --------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `DB_URL`              | URL JDBC para ejecutar el backend fuera de Docker                               | `jdbc:postgresql://localhost:5432/product_catalog_db` |
-| `DB_USERNAME`         | Usuario PostgreSQL                                                              | `postgres`                                            |
-| `DB_PASSWORD`         | Contraseña PostgreSQL                                                           | Define una contraseña local                           |
-| `JWT_SECRET`          | Clave de firma de los tokens; usa una clave aleatoria de al menos 32 caracteres | Define una clave aleatoria                            |
-| `ADMIN_EMAIL`         | Correo del administrador inicial                                                | `admin@example.com`                                   |
-| `ADMIN_PASSWORD`      | Contraseña del administrador inicial                                            | Define una contraseña local                           |
-| `CORS_ALLOWED_ORIGIN` | Origen permitido para solicitudes del frontend                                  | `http://localhost:5173`                               |
-| `VITE_API_URL`        | URL de la API usada por React                                                   | `http://localhost:8080/api`                           |
-
-El archivo `.env` es para Docker Compose; Spring Boot no lo carga automáticamente al ejecutar Maven desde la terminal. Para ejecución local, configura esas variables en el entorno de ejecución o en la configuración de tu IDE. En Docker, el backend se conecta a PostgreSQL mediante el nombre del servicio `db`; `DB_URL` se usa para la ejecución local.
-
-La aplicación inicializa el esquema y actualiza las tablas existentes al arrancar. La base configurada debe existir y estar disponible antes de iniciar el backend. Los listados de productos, categorías y usuarios muestran primero los registros más recientes (`createdAt` descendente); también puedes especificar `sort=createdAt,desc` junto con `page` y `size`.
-
-## Ejecución por separado
-
-Inicia PostgreSQL y crea `product_catalog_db`. Configura las variables anteriores en el entorno y ejecuta el backend:
+En una terminal, inicia el backend:
 
 ```powershell
 Set-Location product_catalog_backend
 mvn spring-boot:run
 ```
 
-En otra terminal, inicia el frontend:
+En otra terminal, instala e inicia el frontend:
 
 ```powershell
 Set-Location product_catalog_frontend
@@ -74,65 +38,62 @@ npm ci
 npm run dev
 ```
 
-El frontend de desarrollo estará disponible en <http://localhost:5173>.
+El frontend estará en <http://localhost:5173>.
+
+## Base de datos y variables de entorno
+
+La aplicación usa PostgreSQL y necesita una base de datos llamada `product_catalog_db`. Si ejecutas el proyecto con Docker, Docker Compose crea la base automáticamente y la expone en el puerto `5433`.
+
+Si ejecutas el backend por separado, crea esa base de datos en PostgreSQL. Por defecto, Spring Boot busca PostgreSQL en `localhost:5432`.
+
+El archivo `.env.example` muestra las variables disponibles. Cópialo como `.env` y configura estos valores:
+
+| Variable              | Para qué sirve                                                                                                 |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `DB_URL`              | Dirección de la base de datos. Para ejecución local usa `jdbc:postgresql://localhost:5432/product_catalog_db`. |
+| `DB_USERNAME`         | Usuario de PostgreSQL.                                                                                         |
+| `DB_PASSWORD`         | Contraseña de PostgreSQL.                                                                                      |
+| `JWT_SECRET`          | Clave usada para las sesiones. Configura una clave aleatoria de al menos 32 caracteres.                        |
+| `ADMIN_EMAIL`         | Correo del administrador inicial.                                                                              |
+| `ADMIN_PASSWORD`      | Contraseña del administrador inicial.                                                                          |
+| `CORS_ALLOWED_ORIGIN` | Dirección permitida para el frontend; normalmente `http://localhost:5173`.                                     |
+| `VITE_API_URL`        | Dirección de la API; normalmente `http://localhost:8080/api`.                                                  |
+
+Docker Compose lee las variables de `.env`. Si ejecutas los programas por separado, ese archivo no se carga automáticamente. En PowerShell, configura las variables en la terminal donde iniciarás el programa. Por ejemplo:
+
+```powershell
+$env:DB_URL = "jdbc:postgresql://localhost:5432/product_catalog_db"
+$env:DB_USERNAME = "postgres"
+$env:DB_PASSWORD = "tu-contraseña-de-postgres"
+$env:JWT_SECRET = "escribe-aqui-una-clave-aleatoria-de-32-caracteres-o-mas"
+$env:ADMIN_EMAIL = "admin@example.com"
+$env:ADMIN_PASSWORD = "change-me-now"
+$env:CORS_ALLOWED_ORIGIN = "http://localhost:5173"
+$env:VITE_API_URL = "http://localhost:8080/api"
+```
+
+No subas tu archivo `.env` ni compartas contraseñas reales.
 
 ## Usuario de prueba
 
-Con los valores predeterminados de Docker Compose:
+Si copiaste `.env.example` sin cambiar los datos del administrador, puedes ingresar con:
 
 - Correo: `admin@example.com`
-- Contraseña: `Admin123!`
-- Rol: `ADMIN`
+- Contraseña: `change-me-now`
+- Rol: administrador
 
-Si configuraste `ADMIN_EMAIL` o `ADMIN_PASSWORD` en `.env`, usa esos valores. El administrador inicial se crea solo si ese correo aún no existe; cambiar la contraseña de configuración no modifica una cuenta ya creada.
+Si cambias `ADMIN_EMAIL` o `ADMIN_PASSWORD`, usa los datos que configuraste. Sin un archivo `.env`, Docker Compose usa `admin@example.com` y `Admin123!`. El usuario administrador se crea al iniciar la aplicación si todavía no existe.
 
 ## Decisiones técnicas
 
-- Spring Boot organiza la API por controladores, servicios, repositorios, DTOs y entidades. React separa páginas, componentes reutilizables, autenticación y llamadas HTTP; Tailwind CSS 4 aplica estilos adaptables a móvil, tableta y escritorio.
-- PostgreSQL almacena los datos. Spring Data JPA implementa el acceso paginado.
-- JWT protege las rutas autenticadas; Spring Security aplica los roles y BCrypt cifra las contraseñas.
-- `POST /api/auth/logout` revoca el JWT actual y elimina el token del navegador. La revocación se guarda en PostgreSQL hasta que el token expire; los registros vencidos se limpian al cerrar otra sesión.
-- La relación muchos a muchos se modela con `product_categories`, una entidad de asociación con ID propio, columnas de auditoría y una restricción única sobre `(product_id, category_id)`.
-- `created_by` guarda el correo y determina la propiedad de productos y categorías. Cuando ADMIN cambia el correo de un usuario, esos recursos se transfieren al correo nuevo.
-- Las categorías con productos asociados no se pueden eliminar; primero hay que quitar las asociaciones.
+- Usé Spring Boot y Java para crear una API, y React para la interfaz.
+- Usé PostgreSQL para guardar los datos y Spring Data JPA para consultarlos.
+- Usé JWT para mantener la sesión y Spring Security para proteger las rutas.
+- Separé el código por responsabilidades: páginas y componentes en el frontend; controladores, servicios y repositorios en el backend.
+- Usé JUnit y Mockito para probar el backend, y React Testing Library para probar acciones visibles para el usuario.
 
-## Pruebas
+## Qué mejoraría con más tiempo
 
-Para aplicar el formato estándar de Java (Google Java Format):
-
-```powershell
-Set-Location product_catalog_backend
-mvn fmt:format
-mvn fmt:check
-```
-
-Para verificar el formato de los archivos React/CSS y configuración compartida:
-
-```powershell
-Set-Location product_catalog_frontend
-npm run format:check
-```
-
-Backend, JUnit 5, Mockito y Spring Boot Test:
-
-```powershell
-Set-Location product_catalog_backend
-mvn test
-```
-
-Frontend, Vitest y React Testing Library:
-
-```powershell
-Set-Location product_catalog_frontend
-npm ci
-npm test
-npm run build
-```
-
-La colección [postman_collection.json](./postman_collection.json) permite probar los endpoints principales.
-
-## Mejoras posibles
-
-- Incorporar migraciones versionadas con Flyway o Liquibase en lugar de depender de la inicialización de esquema de la aplicación.
-- Ampliar las pruebas con escenarios de integración usando PostgreSQL y pruebas de componentes para los flujos principales.
-- Añadir observabilidad, documentación OpenAPI y configuración de despliegue para producción, con secretos administrados fuera del repositorio.
+- Agregaría más pruebas para los flujos principales, incluyendo pruebas que usen una base de datos real.
+- Usaría Flyway para llevar un historial claro de los cambios en la base de datos.
+- Agregaría documentación de la API y mejores herramientas para revisar errores en producción.
