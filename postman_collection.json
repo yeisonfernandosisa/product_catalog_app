@@ -97,24 +97,6 @@
             },
             "url": "{{baseUrl}}/auth/login"
           }
-        },
-        {
-          "name": "Logout",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 204) { pm.collectionVariables.unset('token'); }"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "url": "{{baseUrl}}/auth/logout"
-          }
         }
       ]
     },

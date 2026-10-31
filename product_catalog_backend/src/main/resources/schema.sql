@@ -42,14 +42,7 @@ CREATE TABLE IF NOT EXISTS public.product_categories (
     CONSTRAINT product_categories_product_category_key UNIQUE (product_id, category_id)
 );
 
-CREATE TABLE IF NOT EXISTS public.revoked_tokens (
-    token_id VARCHAR(36) PRIMARY KEY,
-    expires_at TIMESTAMP NOT NULL,
-    created_by VARCHAR(255) NOT NULL,
-    updated_by VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
-);
+DROP TABLE IF EXISTS public.revoked_tokens;
 
 ALTER TABLE public.app_users ADD COLUMN IF NOT EXISTS full_name VARCHAR(255);
 ALTER TABLE public.app_users ADD COLUMN IF NOT EXISTS created_by VARCHAR(255);

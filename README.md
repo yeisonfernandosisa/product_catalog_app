@@ -88,14 +88,14 @@ Si cambias `ADMIN_EMAIL` o `ADMIN_PASSWORD`, usa los datos que configuraste. Sin
 
 - Usé Spring Boot y Java para crear una API, y React para la interfaz.
 - Usé PostgreSQL para guardar los datos y Spring Data JPA para consultarlos.
-- Usé JWT para mantener la sesión y Spring Security para proteger las rutas.
+- Usé JWT para mantener la sesión y Spring Security para proteger las rutas. Al cerrar sesión, el token se elimina del navegador, pero sigue válido hasta vencer (24 horas).
 - Separé el código por responsabilidades: páginas y componentes en el frontend; controladores, servicios y repositorios en el backend.
 - Usé JUnit y Mockito para probar el backend, y React Testing Library para probar acciones visibles para el usuario.
 
 ## Qué mejoraría con más tiempo
 
 - Agregaría más pruebas para los flujos principales, incluyendo pruebas que usen una base de datos real.
-- Usaría Flyway para llevar un historial claro de los cambios en la base de datos.
+- Agregaría cargues masivos para evaluar el rendimiento de la aplicacion.
 - Agregaría documentación de la API y mejores herramientas para revisar errores en producción.
 
 ## Estructura del proyecto
@@ -129,3 +129,9 @@ product_catalog_app/
 ├── .env.example                       # Plantilla de configuración para variables de entorno
 ├── docker-compose.yml                 # Configura y conecta frontend, backend y base de datos
 ├── postman_collection.json            # Solicitudes listas para probar la API con Postman
+
+El proyecto busca ser:
+- mantenible, escalabe, legible seguro, 
+- que cumpla con los requerimientos y funcionalidad
+- buenas practicas y estructura
+- manejo de errores

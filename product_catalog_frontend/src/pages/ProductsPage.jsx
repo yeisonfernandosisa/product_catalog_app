@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getCategories } from '../api/categories'
 import { errorMessage } from '../api/apiClient'
 import { deleteProduct, getProducts, saveProduct } from '../api/products'
@@ -41,6 +41,7 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const nameInputRef = useRef(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -69,6 +70,12 @@ export default function ProductsPage() {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    if (editing !== null && editing !== 'new') {
+      nameInputRef.current?.focus()
+    }
+  }, [editing])
 
   function startEdit(product) {
     setEditing(product.id)
@@ -157,6 +164,7 @@ export default function ProductsPage() {
               Nombre
               <input
                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+                ref={nameInputRef}
                 required
                 value={form.name}
                 onChange={(event) => setForm({ ...form, name: event.target.value })}

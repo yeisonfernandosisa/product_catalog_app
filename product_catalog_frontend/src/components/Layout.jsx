@@ -1,19 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { errorMessage } from '../api/apiClient'
 import { useAuth } from '../auth/AuthContext'
 
 export default function Layout() {
   const { user, logout } = useAuth()
-
-  async function handleLogout() {
-    try {
-      await logout()
-    } catch (error) {
-      window.alert(
-        `La sesión se cerró en este dispositivo, pero no se pudo invalidar en el servidor: ${errorMessage(error)}`,
-      )
-    }
-  }
 
   return (
     <div className="min-h-screen">
@@ -76,7 +65,7 @@ export default function Layout() {
           <span className="hidden max-w-40 truncate sm:inline">{user?.fullName}</span>
           <button
             className="rounded-lg bg-slate-100 px-3 py-2 font-semibold text-slate-700 transition hover:bg-slate-200"
-            onClick={handleLogout}
+            onClick={logout}
           >
             Cerrar sesión
           </button>

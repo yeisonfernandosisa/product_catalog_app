@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { deleteCategory, getCategories, saveCategory } from '../api/categories'
 import { errorMessage } from '../api/apiClient'
 import Pagination from '../components/Pagination'
@@ -16,6 +16,7 @@ export default function CategoriesPage() {
   const [editing, setEditing] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const nameInputRef = useRef(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -33,6 +34,12 @@ export default function CategoriesPage() {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    if (editing !== null) {
+      nameInputRef.current?.focus()
+    }
+  }, [editing])
 
   async function submit(event) {
     event.preventDefault()
@@ -99,6 +106,7 @@ export default function CategoriesPage() {
           {editing ? 'Editar categoría' : 'Nueva categoría'}
           <input
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+            ref={nameInputRef}
             required
             value={name}
             onChange={(event) => setName(event.target.value)}

@@ -49,6 +49,15 @@ describe('ProductsPage', () => {
     expect(screen.getAllByText('Electrónica')).toHaveLength(2)
   })
 
+  it('focuses the product name when editing a product', async () => {
+    render(<ProductsPage />)
+    await screen.findByText('Audífonos')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Editar' }))
+
+    expect(screen.getByLabelText('Nombre')).toHaveFocus()
+  })
+
   it('saves a new product with a numeric price', async () => {
     render(<ProductsPage />)
     fireEvent.click(await screen.findByRole('button', { name: /Nuevo producto/i }))

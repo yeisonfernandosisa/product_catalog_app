@@ -1,5 +1,4 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { logout as logoutRequest } from '../api/auth'
 
 const AuthContext = createContext(null)
 
@@ -18,16 +17,10 @@ export function AuthProvider({ children }) {
         localStorage.setItem('user', JSON.stringify(profile))
         setUser(profile)
       },
-      async logout() {
-        try {
-          if (localStorage.getItem('token')) {
-            await logoutRequest()
-          }
-        } finally {
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
-          setUser(null)
-        }
+      logout() {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        setUser(null)
       },
     }),
     [user],

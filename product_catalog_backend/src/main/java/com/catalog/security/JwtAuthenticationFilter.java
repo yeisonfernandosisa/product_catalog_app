@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.catalog.repository.UserRepository;
-import com.catalog.service.TokenRevocationService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,13 +21,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserRepository users;
-    private final TokenRevocationService tokenRevocations;
 
-    public JwtAuthenticationFilter(
-            JwtService jwtService, UserRepository users, TokenRevocationService tokenRevocations) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserRepository users) {
         this.jwtService = jwtService;
         this.users = users;
-        this.tokenRevocations = tokenRevocations;
     }
 
     @Override
@@ -38,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-            if (jwtService.isValid(token) && !tokenRevocations.isRevoked(jwtService.tokenId(token))) {
+            if (jwtService.isValid(token)) {
                 String email = jwtService.subject(token);
                 users
                         .findByEmail(email)

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getUsers, updateUser } from '../api/users'
 import { errorMessage } from '../api/apiClient'
 import Pagination from '../components/Pagination'
@@ -23,6 +23,7 @@ export default function UsersPage() {
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const nameInputRef = useRef(null)
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -40,6 +41,12 @@ export default function UsersPage() {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  useEffect(() => {
+    if (selected) {
+      nameInputRef.current?.focus()
+    }
+  }, [selected])
 
   function edit(user) {
     setSelected(user)
@@ -107,6 +114,7 @@ export default function UsersPage() {
               Nombre
               <input
                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+                ref={nameInputRef}
                 required
                 value={form.fullName}
                 onChange={(event) =>

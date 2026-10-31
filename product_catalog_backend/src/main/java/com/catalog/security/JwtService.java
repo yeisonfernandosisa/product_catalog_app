@@ -2,7 +2,6 @@ package com.catalog.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -26,7 +25,6 @@ public class JwtService {
     public String generate(AppUser user) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
-                .id(UUID.randomUUID().toString())
                 .subject(user.getEmail())
                 .claim("role", user.getRole().name())
                 .issuedAt(new Date(now))
@@ -37,23 +35,6 @@ public class JwtService {
 
     public String subject(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
-    }
-
-    public String tokenId(String token) {
-        String tokenId
-                = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getId();
-        return tokenId != null
-                ? tokenId
-                : UUID.nameUUIDFromBytes(token.getBytes(StandardCharsets.UTF_8)).toString();
-    }
-
-    public Date expiration(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration();
     }
 
     public boolean isValid(String token) {

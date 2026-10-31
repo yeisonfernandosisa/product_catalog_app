@@ -29,6 +29,15 @@ describe('CategoriesPage', () => {
     expect(await screen.findByText('Libros')).toBeInTheDocument()
   })
 
+  it('focuses the category name when editing a category', async () => {
+    render(<CategoriesPage />)
+    await screen.findByText('Libros')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Editar' }))
+
+    expect(screen.getByLabelText('Editar categoría')).toHaveFocus()
+  })
+
   it('creates a category using the name from the form', async () => {
     render(<CategoriesPage />)
     fireEvent.change(screen.getByLabelText('Nueva categoría'), {
